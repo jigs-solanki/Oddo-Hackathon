@@ -1,0 +1,56 @@
+<div class="form-card">
+  <div style="display:flex; justify-content:space-between; align-items:center">
+    <div style="display:flex; gap:12px; align-items:center">
+      <a class="btn btn-new" href="/receipts/create">NEW</a>
+      <h2>Receipt</h2>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center">
+      <button class="btn">Validate</button>
+      <button class="btn">Print</button>
+      <button class="btn ghost">Cancel</button>
+      <span style="margin-left:12px"><span class="status-badge <%= (receipt.status||'done').toString().toLowerCase() %>"><%= (receipt.status||'Done').toString().charAt(0).toUpperCase() + (receipt.status||'done').toString().slice(1) %></span></span>
+    </div>
+  </div>
+
+  <div style="margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:16px">
+    <div>
+      <div style="color:#bbb; font-size:13px">Reference</div>
+      <div style="font-weight:700; margin:8px 0"><%= receipt.ref || ('RCT-' + (receipt._id||'').toString().slice(-6)) %></div>
+
+      <div style="color:#bbb; font-size:13px">Receive From</div>
+      <div style="margin:8px 0"><%= receipt.supplier || '-' %></div>
+
+      <div style="color:#bbb; font-size:13px">Responsible</div>
+      <div style="margin:8px 0"><%= receipt.createdBy ? receipt.createdBy.name : '-' %></div>
+    </div>
+
+    <div>
+      <div style="color:#bbb; font-size:13px">Schedule Date</div>
+      <div style="margin:8px 0"><%= receipt.schedule ? receipt.schedule.toLocaleDateString() : '-' %></div>
+
+      <div style="color:#bbb; font-size:13px">Operation type</div>
+      <div style="margin:8px 0">Receipt</div>
+    </div>
+  </div>
+
+  <hr style="margin:18px 0; border-color:#222" />
+
+  <h3>Products</h3>
+  <table class="history-table striped" style="width:100%">
+    <thead>
+      <tr><th style="width:70%">Product</th><th style="width:30%">Quantity</th></tr>
+    </thead>
+    <tbody>
+      <% (receipt.items||[]).forEach(function(it){ %>
+        <tr>
+          <td><%= it.product && it.product.name ? it.product.name : (it.product || '-') %></td>
+          <td><%= it.qty %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <div style="margin-top:14px">
+    <a class="link" href="/receipts/create">Add New product</a>
+  </div>
+</div>

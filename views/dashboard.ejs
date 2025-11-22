@@ -1,0 +1,59 @@
+<div class="page-header">
+	<h2>Dashboard</h2>
+	<p class="muted">Quick overview of inventory and recent activity</p>
+</div>
+
+<div class="dashboard-shell">
+	<div class="dash-grid">
+	<div class="dash-card">
+		<div class="dash-card-inner">
+			<h3>Receipt</h3>
+			<div class="dash-stats">
+				<div class="big-count"><%= typeof pendingReceipts !== 'undefined' ? pendingReceipts : 0 %></div>
+				<div class="meta">
+					<div><strong><%= typeof lateReceipts !== 'undefined' ? lateReceipts : 0 %></strong> Late</div>
+					<div><strong><%= typeof totalReceipts !== 'undefined' ? totalReceipts : 0 %></strong> operations</div>
+				</div>
+			</div>
+			<div class="dash-actions">
+				<a class="btn" href="/receipts"> <%= typeof pendingReceipts !== 'undefined' ? pendingReceipts : 0 %> to receive</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="dash-card">
+		<div class="dash-card-inner">
+			<h3>Delivery</h3>
+			<div class="dash-stats">
+				<div class="big-count"><%= typeof pendingDeliveries !== 'undefined' ? pendingDeliveries : 0 %></div>
+				<div class="meta">
+					<div><strong><%= typeof lateDeliveries !== 'undefined' ? lateDeliveries : 0 %></strong> Late</div>
+					<div><strong><%= typeof totalDeliveries !== 'undefined' ? totalDeliveries : 0 %></strong> operations</div>
+				</div>
+			</div>
+			<div class="dash-actions">
+				<a class="btn" href="/deliveries"> <%= typeof pendingDeliveries !== 'undefined' ? pendingDeliveries : 0 %> to deliver</a>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<section>
+	<h3>Recent Activity</h3>
+	<table>
+		<thead class="recentActivity"><tr><th>Type</th><th>Ref</th><th>Items</th><th>By</th><th>Date</th></tr></thead>
+		<tbody>
+			<% var _activity = (typeof recentActivity !== 'undefined' && recentActivity) ? recentActivity : []; %>
+			<% _activity.forEach(function(a){ %>
+				<tr>
+					<td><%= a.type %></td>
+					<td><%= a.ref || '-' %></td>
+					<td><%= a.summary || '-' %></td>
+					<td><%= a.user || '-' %></td>
+					<td><%= a.date ? a.date.toLocaleString() : '-' %></td>
+				</tr>
+			<% }) %>
+		</tbody>
+	</table>
+</section>

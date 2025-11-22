@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>StockMaster</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand logo-wrap">
+        <a href="<%= user ? '/landing' : '/' %>">
+          <img src="/images/logo.svg" alt="StockMaster" class="brand-logo" />
+        </a>
+      </div>
+      <nav class="topnav">
+        <a href="/dashboard" class="<%= path && path.startsWith('/dashboard') ? 'active' : '' %>"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/></svg>Dashboard</a>
+        <a href="/products" class="<%= path && path.startsWith('/products') ? 'active' : '' %>"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/></svg>Products</a>
+        <a href="/stock" class="<%= path && path.startsWith('/stock') ? 'active' : '' %>"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/></svg>Stock</a>
+        <div class="nav-dropdown <%= path && (path.startsWith('/warehouse') || path.startsWith('/locations')) ? 'active' : '' %>">
+          <a href="#" data-toggle="nav-dropdown"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3z"/></svg>Setting ▾</a>
+          <div class="nav-dropdown-menu">
+            <a href="/warehouse" class="<%= path && path.startsWith('/warehouse') ? 'active' : '' %>">Warehouse</a>
+            <a href="/locations" class="<%= path && path.startsWith('/locations') ? 'active' : '' %>">Locations</a>
+          </div>
+        </div>
+        <div class="nav-dropdown <%= path && (path.startsWith('/receipts') || path.startsWith('/delivery') || path.startsWith('/adjustment')) ? 'active' : '' %>">
+          <a href="#" data-toggle="nav-dropdown"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/></svg>Operations ▾</a>
+          <div class="nav-dropdown-menu">
+            <a href="/receipts/create" class="<%= path && path.startsWith('/receipts/create') ? 'active' : '' %>">Receipt</a>
+            <a href="/delivery/create" class="">Delivery</a>
+            <a href="/adjustment" class="<%= path && path.startsWith('/adjustment') ? 'active' : '' %>">Adjustment</a>
+          </div>
+        </div>
+        <a href="/history" class="<%= path && (path.startsWith('/history') || path.startsWith('/transfer')) ? 'active' : '' %>"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>History</a>
+      </nav>
+      <div class="top-actions">
+        <% if (user) { %>
+        <div class="dropdown">
+          <button class="btn small" data-toggle="dropdown">New ▾</button>
+          <div class="dropdown-menu">
+            <a href="/products/create">New Product</a>
+            <a href="/receipts/create">New Receipt</a>
+            <a href="/delivery/create">New Delivery</a>
+            <a href="/transfer/create">New Transfer</a>
+            <a href="/adjustment/create">New Adjustment</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="btn small ghost" data-toggle="dropdown">Export ▾</button>
+          <div class="dropdown-menu">
+            <a href="/export?resource=products">Export Products (CSV)</a>
+            <a href="/export?resource=receipts">Export Receipts (CSV)</a>
+            <a href="/export?resource=deliveries">Export Deliveries (CSV)</a>
+          </div>
+        </div>
+
+        <span class="user-greet">Hi, <%= user.name %></span>
+        <a class="btn small ghost" href="/auth/logout">Logout</a>
+        <% } else { %>
+          <a class="login-link" href="/auth/login">Login</a>
+          <a class="login-link" href="/auth/register">Register</a>
+        <% } %>
+      </div>
+    </header>
+
+    
+
+    <main class="main">
+        <% if (success && success.length) { %>
+          <div class="flash success"><%= success %></div>
+        <% } %>
+        <% if (error && error.length) { %>
+          <div class="flash error"><%= error %></div>
+        <% } %>
+
+        <div class="page">
+          <div class="dashboard-shell global-shell">
+            <%- body %>
+          </div>
+        </div>
+      </main>
+    <footer class="app-footer">
+      <p>StockMaster • Starter</p>
+    </footer>
+  </div>
+  <script src="/js/dropdown.js"></script>
+</body>
+</html>

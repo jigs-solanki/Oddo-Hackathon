@@ -1,0 +1,34 @@
+<div class="page-header">
+  <h2>Products</h2>
+  <div class="actions">
+    <a class="btn" href="/products/create">Add Product</a>
+    <a class="link <%= mine ? 'active' : '' %>" href="/products?mine=1">My Items</a>
+    <a class="link <%= !mine ? 'active' : '' %>" href="/products">All</a>
+  </div>
+  <% if (mine) { %>
+    <div class="filter-pill">Showing: <strong>My Items</strong></div>
+  <% } %>
+</div>
+
+<table class="striped">
+  <thead><tr><th>Name</th><th>SKU</th><th>Category</th><th>Unit</th><th>Stock</th><th>Location</th><th>Created By</th><th>Actions</th></tr></thead>
+  <tbody>
+  <% products.forEach(p => { %>
+    <tr>
+      <td><%= p.name %></td>
+      <td><%= p.sku %></td>
+      <td><%= p.category || '-' %></td>
+      <td><%= p.unit || '-' %></td>
+      <td><%= p.stock %></td>
+      <td><%= p.location %></td>
+      <td><%= p.createdBy ? p.createdBy.name : '-' %></td>
+      <td>
+        <a href="/products/edit/<%= p._id %>">Edit</a> |
+        <form action="/products/delete/<%= p._id %>?_method=DELETE" method="post" style="display:inline">
+          <button type="submit" onclick="return confirm('Delete?')">Delete</button>
+        </form>
+      </td>
+    </tr>
+  <% }) %>
+  </tbody>
+</table>

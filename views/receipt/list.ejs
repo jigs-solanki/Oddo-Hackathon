@@ -1,0 +1,29 @@
+<div class="page-header">
+  <h2>Receipts</h2>
+  <div class="actions">
+    <a class="btn" href="/receipts/create">New Receipt</a>
+    <a class="link <%= mine ? 'active' : '' %>" href="/receipts?mine=1">My Items</a>
+    <a class="link <%= !mine ? 'active' : '' %>" href="/receipts">All</a>
+  </div>
+  <% if (mine) { %>
+    <div class="filter-pill">Showing: <strong>My Receipts</strong></div>
+  <% } %>
+</div>
+
+<table>
+<thead><tr><th>Supplier</th><th>Items</th><th>Created By</th><th>Date</th></tr></thead>
+<tbody>
+<% receipts.forEach(r => { %>
+  <tr>
+    <td><a href="/receipts/<%= r._id %>"><%= r.supplier || '-' %></a></td>
+    <td>
+      <% r.items.forEach(i => { %>
+        <div><%= i.product ? i.product.name : i.product %> × <%= i.qty %></div>
+      <% }) %>
+    </td>
+    <td><%= r.createdBy ? r.createdBy.name : '-' %></td>
+    <td><%= r.createdAt.toLocaleString() %></td>
+  </tr>
+<% }) %>
+</tbody>
+</table>
