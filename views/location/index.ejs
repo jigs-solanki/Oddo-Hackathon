@@ -1,0 +1,40 @@
+<div class="sm-container">
+  <div class="page-header">
+    <h2>Location</h2>
+    <p class="sm-muted">This holds the multiple locations of warehouse, rooms etc..</p>
+  </div>
+
+  <div class="sm-form-card">
+    <form action="/locations" method="post">
+      <div class="sm-form-row">
+        <label>Name:</label>
+        <input type="text" name="name" placeholder="Location name" />
+      </div>
+
+      <div class="sm-form-row">
+        <label>Short Code:</label>
+        <input type="text" name="code" placeholder="LOC" />
+      </div>
+
+      <div class="sm-form-row">
+        <label>Warehouse:</label>
+        <select name="warehouse">
+          <% if (warehouses && warehouses.length) { %>
+            <% warehouses.forEach(function(w){ %>
+              <option value="<%= w._id %>"><%= w.name %> (<%= w.code %>)</option>
+            <% }) %>
+          <% } else { %>
+            <option value="">-- no warehouses --</option>
+          <% } %>
+        </select>
+        <div class="sm-muted" style="margin-top:8px">
+          <a href="/warehouse" class="sm-small-link">Manage Warehouse</a>
+        </div>
+      </div>
+
+      <div class="sm-form-row">
+        <button class="sm-btn">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

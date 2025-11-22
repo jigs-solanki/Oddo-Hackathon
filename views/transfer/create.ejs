@@ -1,0 +1,29 @@
+<h2>Create Transfer (Internal)</h2>
+<form action="/history/create" method="post">
+  <label>From<input name="from" value="Main Warehouse"></label><br>
+  <label>To<input name="to" value=""></label><br>
+
+  <div id="items">
+    <div class="row">
+      <select name="productIds[]">
+        <option value="">--select product--</option>
+        <% products.forEach(p => { %>
+          <option value="<%= p._id %>"><%= p.name %> (Stock: <%= p.stock %>)</option>
+        <% }) %>
+      </select>
+      <input name="qtys[]" type="number" value="0" min="0">
+    </div>
+  </div>
+
+  <button type="button" onclick="addRow()">Add item</button>
+  <button>Create</button>
+</form>
+
+<script>
+function addRow(){
+  const div = document.createElement('div');
+  div.className='row';
+  div.innerHTML = document.querySelector('.row').innerHTML;
+  document.getElementById('items').appendChild(div);
+}
+</script>

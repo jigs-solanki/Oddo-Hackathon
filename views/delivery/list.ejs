@@ -1,0 +1,96 @@
+<div class="history-header">
+  <div class="history-left">
+    <a class="btn btn-new" href="/delivery/create">NEW</a>
+    <h2 class="history-title">Deliveries</h2>
+  </div>
+  <div class="history-right">
+    <div class="history-controls">
+      <input type="search" placeholder="Search by reference, customer or product" id="delivery-search" />
+      <div style="display:flex; gap:8px; align-items:center; margin-left:8px">
+        <button id="filter-all" class="btn small">All</button>
+        <button id="filter-ready" class="btn small">Ready</button>
+        <button id="filter-done" class="btn small">Done</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="history-table-wrap">
+  <table class="history-table striped">
+    <thead>
+      <tr>
+        <th>Reference</th>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Items</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (!deliveries || deliveries.length === 0) { %>
+        <tr><td colspan="7" class="muted">No deliveries found</td></tr>
+      <% } %>
+      <% deliveries.forEach(function(d){ %>
+        <% const items = d.items || []; %>
+        <% const status = (d.status || 'done').toString().toLowerCase(); %>
+        <% const ref = d.ref || ('DLV-' + (d._id || '').toString().slice(-6)); %>
+        <% items.forEach(function(item, idx){ %>
+          <tr data-status="<%= status %>">
+            <% if (idx === 0) { %>
+              <td rowspan="<%= items.length %>">
+                <a href="/delivery/<%= d._id %>"><strong><%= ref %></strong></a>
+              </td>
+              <td rowspan="<%= items.length %>"><%= d.createdAt ? d.createdAt.toLocaleDateString() : '-' %></td>
+              <td rowspan="<%= items.length %>"><%= d.customer || '-' %></td>
+              <td rowspan="<%= items.length %>">Main Warehouse</td>
+              <td rowspan="<%= items.length %>"><%= d.customer || 'Customer' %></td>
+            <% } %>
+            <td><%= item.product && item.product.name ? item.product.name + ' × ' + item.qty : (item.product || '-') + ' × ' + item.qty %></td>
+            <% if (idx === 0) { %>
+              <td rowspan="<%= items.length %>"><span class="status-badge <%= status %>"><%= status.charAt(0).toUpperCase() + status.slice(1) %></span></td>
+            <% } %>
+          </tr>
+        <% }) %>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  (function(){
+    const searchEl = document.getElementById('delivery-search');
+    let selectedStatus = 'all';
+
+    function updateVisibility(){
+      const q = (searchEl?.value || '').trim().toLowerCase();
+      document.querySelectorAll('.history-table tbody tr').forEach(tr => {
+        const status = tr.getAttribute('data-status') || 'done';
+        const text = tr.innerText.toLowerCase();
+        const matchesStatus = selectedStatus === 'all' || selectedStatus === status;
+        const matchesSearch = q === '' || text.includes(q);
+        tr.style.display = (matchesStatus && matchesSearch) ? '' : 'none';
+      });
+    }
+
+    searchEl?.addEventListener('input', updateVisibility);
+
+    const buttons = [
+      {id:'filter-all', status:'all'},
+      {id:'filter-ready', status:'ready'},
+      {id:'filter-done', status:'done'}
+    ];
+    buttons.forEach(b => {
+      const el = document.getElementById(b.id);
+      el?.addEventListener('click', function(){
+        selectedStatus = b.status;
+        buttons.forEach(x => document.getElementById(x.id)?.classList.remove('active'));
+        el.classList.add('active');
+        updateVisibility();
+      });
+    });
+    document.getElementById('filter-all')?.classList.add('active');
+  })();
+</script>

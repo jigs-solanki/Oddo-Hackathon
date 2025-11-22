@@ -1,0 +1,54 @@
+<div class="form-card">
+  <h2>Create Delivery (Outgoing)</h2>
+  <form action="/delivery/create" method="post" class="form-grid">
+    <div class="form-row">
+      <label for="customer">Customer</label>
+      <input id="customer" name="customer" />
+    </div>
+
+    <div id="items">
+      <div class="item-row row">
+        <div style="flex:1; margin-right:10px">
+          <label>Product</label>
+          <select name="productIds[]">
+            <option value="">--select product--</option>
+            <% products.forEach(p => { %>
+              <option value="<%= p._id %>"><%= p.name %> (Stock: <%= p.stock %>)</option>
+            <% }) %>
+          </select>
+        </div>
+        <div style="width:140px">
+          <label>Qty</label>
+          <input name="qtys[]" type="number" value="0" min="0" />
+        </div>
+        <div style="width:40px; display:flex; align-items:end;">
+          <button type="button" class="btn small" onclick="removeRow(this)">–</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions" style="display:flex; gap:10px; align-items:center">
+      <button type="button" id="addItem" class="btn small">Add item</button>
+      <button type="submit" class="btn accent">Create</button>
+    </div>
+  </form>
+</div>
+
+<script>
+function addRow(){
+  const template = document.querySelector('.item-row');
+  const div = template.cloneNode(true);
+  const inputs = div.querySelectorAll('input');
+  inputs.forEach(i => i.value = i.getAttribute('value') || '0');
+  const selects = div.querySelectorAll('select');
+  selects.forEach(s => s.selectedIndex = 0);
+  document.getElementById('items').appendChild(div);
+}
+
+function removeRow(btn){
+  const row = btn.closest('.item-row');
+  if(row && document.querySelectorAll('.item-row').length > 1) row.remove();
+}
+
+document.getElementById('addItem').addEventListener('click', addRow);
+</script>
