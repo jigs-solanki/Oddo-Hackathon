@@ -1,0 +1,26 @@
+<div class="form-card auth-card">
+  <div class="form-card-header">
+    <h2>Welcome Back</h2>
+    <p class="muted">Sign in to access your dashboard</p>
+  </div>
+  <form class="form-card-body" action="/auth/login" method="post">
+    <div class="form-row">
+      <label class="label">Email</label>
+      <input class="input" name="email" type="email" required />
+    </div>
+
+    <div class="form-row">
+      <label class="label">Password</label>
+      <input class="input" name="password" type="password" required />
+    </div>
+
+    <% if (typeof next !== 'undefined') { %>
+      <input type="hidden" name="next" value="<%= next %>" />
+    <% } %>
+
+    <div class="form-row actions">
+      <button class="btn accent">Login</button>
+      <a class="btn ghost" href="/auth/register<% if (typeof next !== 'undefined') { %>?next=<%= encodeURIComponent(next) %><% } %>">Create account</a>
+    </div>
+  </form>
+</div>

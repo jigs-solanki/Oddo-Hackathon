@@ -1,0 +1,26 @@
+<div class="page-header">
+  <h2>Adjustments</h2>
+  <div class="actions">
+    <a class="btn" href="/adjustment/create">New Adjustment</a>
+    <a class="link <%= mine ? 'active' : '' %>" href="/adjustment?mine=1">My Items</a>
+    <a class="link <%= !mine ? 'active' : '' %>" href="/adjustment">All</a>
+  </div>
+  <% if (mine) { %>
+    <div class="filter-pill">Showing: <strong>My Adjustments</strong></div>
+  <% } %>
+</div>
+<table>
+<thead><tr><th>Product</th><th>Old</th><th>New</th><th>Reason</th><th>Created By</th><th>Date</th></tr></thead>
+<tbody>
+<% adjustments.forEach(a => { %>
+  <tr>
+    <td><%= a.product ? a.product.name : '-' %></td>
+    <td><%= a.oldQty %></td>
+    <td><%= a.newQty %></td>
+    <td><%= a.reason %></td>
+    <td><%= a.createdBy ? a.createdBy.name : '-' %></td>
+    <td><%= a.createdAt.toLocaleString() %></td>
+  </tr>
+<% }) %>
+</tbody>
+</table>

@@ -1,0 +1,33 @@
+<div class="form-card">
+  <h2>Create Adjustment</h2>
+  <form action="/adjustment/create" method="post" class="form-grid">
+    <div class="form-row">
+      <label for="productId">Product</label>
+      <select id="productId" name="productId">
+        <option value="">--select--</option>
+        <% products.forEach(p => { %>
+          <option value="<%= p._id %>" <%= typeof preselected !== 'undefined' && preselected && preselected.toString() === p._id.toString() ? 'selected' : '' %>><%= p.name %> (Stock: <%= p.stock %>)</option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="newQty">New Quantity</label>
+      <input id="newQty" name="newQty" type="number" />
+    </div>
+
+    <div class="form-row">
+      <label for="reservedQty">Reserved Quantity</label>
+      <input id="reservedQty" name="reservedQty" type="number" />
+    </div>
+
+    <div class="form-row">
+      <label for="reason">Reason</label>
+      <input id="reason" name="reason" />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn accent">Create</button>
+    </div>
+  </form>
+</div>

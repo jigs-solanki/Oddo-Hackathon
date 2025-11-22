@@ -1,0 +1,29 @@
+<div class="form-card auth-card">
+  <div class="form-card-header">
+    <h2>Create an account</h2>
+    <p class="muted">Get started with StockMaster — it's free and fast.</p>
+  </div>
+  <form class="form-card-body" action="/auth/register" method="post">
+    <div class="form-row">
+      <label class="label">Full name</label>
+      <input class="input" name="name" required />
+    </div>
+    <div class="form-row">
+      <label class="label">Email</label>
+      <input class="input" name="email" type="email" required />
+    </div>
+    <div class="form-row">
+      <label class="label">Password</label>
+      <input class="input" name="password" type="password" required />
+    </div>
+
+    <% if (typeof next !== 'undefined') { %>
+      <input type="hidden" name="next" value="<%= next %>" />
+    <% } %>
+
+    <div class="form-row actions">
+      <button class="btn accent">Create account</button>
+      <a class="btn ghost" href="/auth/login<% if (typeof next !== 'undefined') { %>?next=<%= encodeURIComponent(next) %><% } %>">Already have an account?</a>
+    </div>
+  </form>
+</div>

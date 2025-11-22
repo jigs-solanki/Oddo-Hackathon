@@ -1,0 +1,38 @@
+<div class="form-card">
+  <h2>Edit Product</h2>
+  <form action="/products/edit/<%= p._id %>?_method=PUT" method="post" class="form-grid">
+    <div class="form-row">
+      <label for="name">Name</label>
+      <input id="name" name="name" value="<%= p.name %>" required />
+    </div>
+
+    <div class="form-row">
+      <label for="sku">SKU</label>
+      <input id="sku" name="sku" value="<%= p.sku %>" required />
+    </div>
+
+    <div class="form-row">
+      <label for="category">Category</label>
+      <input id="category" name="category" value="<%= p.category %>" />
+    </div>
+
+    <div class="form-row">
+      <label for="unit">Unit</label>
+      <input id="unit" name="unit" value="<%= p.unit %>" />
+    </div>
+
+    <div class="form-row">
+      <label for="stock">Stock</label>
+      <input id="stock" name="stock" type="number" value="<%= p.stock %>" />
+    </div>
+
+    <div class="form-row">
+      <label for="location">Location</label>
+      <input id="location" name="location" value="<%= p.location %>" />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn accent">Update</button>
+    </div>
+  </form>
+</div>

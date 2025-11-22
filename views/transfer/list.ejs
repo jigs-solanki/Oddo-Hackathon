@@ -1,0 +1,110 @@
+<div class="history-header">
+  <div class="history-left">
+    <a class="btn btn-new" href="/history/create">NEW</a>
+    <h2 class="history-title">Move History</h2>
+  </div>
+  <div class="history-right">
+    <div class="history-controls">
+      <input type="search" placeholder="Search by reference or contact" id="history-search" />
+      <div style="display:flex; gap:8px; align-items:center; margin-left:8px">
+        <button id="filter-all" class="btn small">All</button>
+        <button id="filter-receipt" class="btn small">Receipts</button>
+        <button id="filter-delivery" class="btn small">Deliveries</button>
+        <button id="filter-transfer" class="btn small">Transfers</button>
+      </div>
+      <button class="icon-btn" title="List view">☰</button>
+      <button class="icon-btn" title="Kanban view">▦</button>
+    </div>
+  </div>
+</div>
+
+<div class="history-table-wrap">
+  <table class="history-table striped">
+    <thead>
+      <tr>
+        <th>Reference</th>
+        <th>Date</th>
+        <th>Contact</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Quantity</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (!transfers || transfers.length === 0) { %>
+        <tr><td colspan="7" class="muted">No moves found</td></tr>
+      <% } %>
+      <% transfers.forEach(function(t){ %>
+        <% const items = t.items || []; %>
+        <% const mtype = (t.type || (t.raw && t.raw.type) || 'transfer').toString().toLowerCase(); %>
+        <% items.forEach(function(item, idx){ %>
+          <tr data-type="<%= mtype %>">
+            <% if (idx === 0) { %>
+              <td rowspan="<%= items.length %>">
+                <span style="display:flex; align-items:center; gap:8px">
+                  <strong><%= t.ref || t._id %></strong>
+                  <span class="type-badge <%= mtype %>"><%= mtype.charAt(0).toUpperCase() + mtype.slice(1) %></span>
+                </span>
+              </td>
+              <td rowspan="<%= items.length %>"><%= t.createdAt ? t.createdAt.toLocaleDateString() : '-' %></td>
+              <td rowspan="<%= items.length %>"><%= t.contact || t.customer || '-' %></td>
+              <td rowspan="<%= items.length %>"><%= t.from || '-' %></td>
+              <td rowspan="<%= items.length %>"><%= t.to || '-' %></td>
+            <% } %>
+            <td><%= item.product && item.product.name ? item.product.name + ' × ' + item.qty : (item.product || '-') + ' × ' + item.qty %></td>
+            <% // determine status: simple heuristic based on vendor presence %>
+            <% let statusClass = 'neutral'; let statusLabel = 'Move'; %>
+            <% if ((t.from || '').toString().toLowerCase().includes('vendor')) { statusClass = 'in'; statusLabel = 'In'; } else if ((t.to || '').toString().toLowerCase().includes('vendor')) { statusClass = 'out'; statusLabel = 'Out'; } %>
+            <% if (idx === 0) { %>
+              <td rowspan="<%= items.length %>" class="status-cell"><span class="status-badge <%= statusClass %>"><%= statusLabel %></span></td>
+            <% } %>
+          </tr>
+        <% }) %>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // combined client-side filtering: type + search
+  (function(){
+    const searchEl = document.getElementById('history-search');
+    let selectedType = 'all';
+
+    function updateVisibility(){
+      const q = (searchEl?.value || '').trim().toLowerCase();
+      document.querySelectorAll('.history-table tbody tr').forEach(tr => {
+        const type = tr.getAttribute('data-type') || 'transfer';
+        const text = tr.innerText.toLowerCase();
+        const matchesType = selectedType === 'all' || selectedType === type;
+        const matchesSearch = q === '' || text.includes(q);
+        tr.style.display = (matchesType && matchesSearch) ? '' : 'none';
+      });
+    }
+
+    // wire search
+    searchEl?.addEventListener('input', updateVisibility);
+
+    // wire filter buttons
+    const buttons = [
+      {id:'filter-all', type:'all'},
+      {id:'filter-receipt', type:'receipt'},
+      {id:'filter-delivery', type:'delivery'},
+      {id:'filter-transfer', type:'transfer'}
+    ];
+    buttons.forEach(b => {
+      const el = document.getElementById(b.id);
+      el?.addEventListener('click', function(){
+        selectedType = b.type;
+        // visual state
+        buttons.forEach(x => document.getElementById(x.id)?.classList.remove('active'));
+        el.classList.add('active');
+        updateVisibility();
+      });
+    });
+
+    // set default active
+    document.getElementById('filter-all')?.classList.add('active');
+  })();
+</script>

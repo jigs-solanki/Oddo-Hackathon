@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="40" viewBox="0 0 160 40">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#5b2e22"/>
+      <stop offset="1" stop-color="#cfa36a"/>
+    </linearGradient>
+  </defs>
+  <rect rx="6" width="160" height="40" fill="#fff"/>
+  <g transform="translate(8,6)">
+    <circle cx="14" cy="14" r="12" fill="#6b3e26" />
+    <path d="M10 8 L18 16 L10 24" fill="none" stroke="#f7e3c9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="40" y="25" font-family="Georgia, serif" font-size="16" fill="#4a2618" font-weight="700">StockMaster</text>
+</svg>
